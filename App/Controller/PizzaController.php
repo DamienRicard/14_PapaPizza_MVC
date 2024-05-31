@@ -7,6 +7,10 @@ use Core\Controller\Controller;
 
 class PizzaController extends Controller
 {
+  /**
+   * methode qui renvoie la vue de la page d'accueil
+   * @return void
+   */
   public function home()
   {
    //préparation des données à transmettre à la vue
@@ -21,5 +25,15 @@ class PizzaController extends Controller
 
    $view = new View('home/home');
    $view->render($view_data);
+  }
+
+  
+  /**
+   * methode qui renvoie la vue de la liste des pizzas
+   * @return void
+   */
+  public function getPizzas()
+  {
+
   }
 }

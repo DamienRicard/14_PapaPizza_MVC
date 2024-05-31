@@ -2,6 +2,8 @@
 
 namespace Core\View;
 
+use App\Controller\AuthController;
+
 class View
 {
   //on doit définir le chemin absolu vers le dossier views
@@ -36,6 +38,8 @@ class View
   //on crée la méthode de rendu
   public function render(?array $view_data = [])  //soit il reçoit un tableau soit il reçois rien
   {
+    //on récupères les données de l'utilisateur
+    $auth = AuthController::class;
     //si on a des données on les extrait
     if (!empty($view_data)) {
       extract($view_data);

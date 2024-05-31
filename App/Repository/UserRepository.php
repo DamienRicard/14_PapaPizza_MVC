@@ -45,4 +45,25 @@ class UserRepository extends Repository
     //on peut retourner l'objet User grâce à son id
     return $this->readById(User::class, $id);
   }
+
+  /**
+   * methode qui récupère un utilisateur par son email
+   * @param string $email
+   * @return User|null
+   */
+  public function findUserByEmail(string $email): ?User
+  {
+    //on crée notre requête sql
+    $q = sprintf('SELECT * FROM %s WHERE email = :email', $this->getTableName());
+    //on prépare la requête
+    $stmt = $this->pdo->prepare($q);
+    //on vérifie que la requête est bien préparée
+    if (!$stmt) return null;
+    //si tout est bon on bind les param
+    $stmt->execute(['email' => $email]);  // tableau avec clé => valeur, la clé correspond au :email ligne 57 de la requête sprinftf
+    while($result = $stmt->fetch()){
+      $user = new User($result);
+    }
+    return $user ?? null;
+  }
 }

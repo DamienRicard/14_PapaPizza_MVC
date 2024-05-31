@@ -44,17 +44,43 @@
                 <nav class="custom-nav">
                     <ul class="custom-ul">
                         <li class="custom-link"><a href="#">Accueil</a></li>
-                        <li class="custom-link"><a href="#">Carte</a></li>
+                        <li class="custom-link"><a href="/pizzas">Carte</a></li>
                         <li class="custom-link"><a href="#">Actualités</a></li>
                         <li class="custom-link"><a href="#">Contact</a></li>
                     </ul>
                 </nav>
             </div>
+            <!-- 3eme bloc : menu du profil -->
             <div class="nav-profil">
                 <nav class="custom-nav-profil">
                     <ul class="custom-ul-profil">
-                        <li class="custom-link"><a href="/connexion">Se connecter <i class="bi bi-person custom-svg"></i></a></li>
-                        <li class="custom-link end-link"><a href="#"><i class="bi bi-cart"></i></a></li>
+                        <li class="custom-link">
+                            <!-- si je suis en session j'affiche mon compte -->
+                            <?php if($auth::isAuth()) : ?>
+                                <div class="dropdown custom-link">
+                                    <a class="dropdown-toggle" href="" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Mon compte <i class="bi bi-person custom-svg"> </i>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <li><a class="dropdown-item custom-link" href="">Profil</a></li>
+                                        <li><a class="dropdown-item custom-link" href="">Créer une pizza</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item custom-link" href="">Mes pizzas</a></li>
+                                        <li><a class="dropdown-item custom-link" href="">Mes commandes</a></li>
+                                    </ul>
+                                </div>
+                                <?php else: ?>
+                                    <a href="/connexion">Se connecter 
+                                        <i class="bi bi-person custom-svg"></i>
+                                    </a>
+                                <?php endif ?>
+                        </li>
+
+
+
+
+                        
+                        <!-- <li class="custom-link end-link"><a href="#"><i class="bi bi-cart"></i></a></li> -->
                     </ul>
                 </nav>
             </div>

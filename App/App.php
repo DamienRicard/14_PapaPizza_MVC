@@ -45,6 +45,8 @@ class App implements DatabaseConfigInterface
   //1ere : méthode start pour activer le routeur, elle va appeller les 2 autres méthodes qui sont privées
   public function start():void
   {
+    //on ouvre l'accès aux sessions
+    session_start();
     //enregistrements des routes
     $this->registerRoutes();
     //demarrage du routeur
@@ -63,6 +65,7 @@ class App implements DatabaseConfigInterface
 
     // PARTIE PIZZA: 
     $this->router->get('/', [PizzaController::class, 'home']);
+    $this->router->get('/pizzas', [PizzaController::class, 'getPizzas']);
   }
 
   //3eme : la méthode qui démarre le routeur
