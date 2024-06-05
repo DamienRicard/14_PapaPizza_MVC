@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use App\AppRepoManager;
 use Core\View\View;
+use App\AppRepoManager;
+use Core\Session\Session;
 use Core\Controller\Controller;
 
 class PizzaController extends Controller
@@ -53,7 +54,9 @@ class PizzaController extends Controller
   public function getPizzaById(int $id):void
   {
     $view_data = [
-      'pizza' => AppRepoManager::getRm()->getPizzaRepository()->getPizzaById($id)
+      'pizza' => AppRepoManager::getRm()->getPizzaRepository()->getPizzaById($id),
+      'form_result' => Session::get(Session::FORM_RESULT),
+      'form_success' => Session::get(Session::FORM_SUCCESS),
     ];
 
     $view = new View('home/pizza_detail');
