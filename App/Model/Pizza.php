@@ -11,6 +11,7 @@ class Pizza extends Model
   public bool $is_active;
   public int $user_id;  //foreign key
 
+  //on crée une propriété d'association pour stocker l'utilisateur
   public User $user;  //pour mettre en relation avec le foreign key
 
   public array $ingredients=[];

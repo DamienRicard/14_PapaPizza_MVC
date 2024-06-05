@@ -12,6 +12,8 @@ class Order extends Model
   public string $status;
   public string $user_id;
 
+  //propriété d'hydratation
   public ?User $user;
+  
   public array $order_rows;
 }

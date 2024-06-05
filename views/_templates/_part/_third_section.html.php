@@ -16,7 +16,7 @@
                     créons. Des recettes traditionnelles à la cuisson parfaite,<span class="strong"> nous mettons
                     tout en œuvre pour vous offrir le meilleur de l'Italie.</span>
                 </p>
-                <a class="call-action" href="#">Je commande</a>
+                <a class="call-action" href="/pizzas">Je découvre la carte</a>
             </div>
         </div>
         <div class="box-info2">

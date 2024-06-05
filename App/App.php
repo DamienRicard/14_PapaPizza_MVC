@@ -4,6 +4,7 @@ namespace App;
 
 use MiladRahimi\PhpRouter\Router;
 use App\Controller\AuthController;
+use App\Controller\OrderController;
 use App\Controller\PizzaController;
 use Core\Database\DatabaseConfigInterface;
 use MiladRahimi\PhpRouter\Exceptions\RouteNotFoundException;
@@ -56,6 +57,13 @@ class App implements DatabaseConfigInterface
   //2eme : méthode qui enregistre les routes
   private function registerRoutes():void
   {
+    //on va définir des pattern pour les routes
+    $this->router->pattern('id', '[0-9]\d*'); //  "\d*" : autant de chiffres qu'on veut en longueur
+
+
+
+
+
     // PARTIE AUTH : 
     //connexion
     $this->router->get('/connexion', [AuthController::class, 'loginForm']);
@@ -66,6 +74,10 @@ class App implements DatabaseConfigInterface
     // PARTIE PIZZA: 
     $this->router->get('/', [PizzaController::class, 'home']);
     $this->router->get('/pizzas', [PizzaController::class, 'getPizzas']);
+    $this->router->get('/pizza/{id}', [PizzaController::class, 'getPizzaById']);
+
+    //PARTIE PANIER
+    $this->router->post('/add/order', [OrderController::class, 'addOrder']);
   }
 
   //3eme : la méthode qui démarre le routeur
