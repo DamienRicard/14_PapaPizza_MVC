@@ -14,6 +14,16 @@
     <div class="alert alert-success" role="alert">
       <?= $form_success->getSuccessMessage()->getMessage() ?>
     </div>
+
+    <script>
+      setTimeout(function() {
+        <?php Session::remove(Session::FORM_SUCCESS); ?>
+      },600);
+      setTimeout(function() {
+        document.querySelector('.alert-success').remove();
+      },600);
+    </script>
+
   <?php endif ?>
 
 <div class="container-pizza-detail">
