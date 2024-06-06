@@ -2,6 +2,19 @@
 
 
 <h1 class="title title-detail"> <?= $pizza->name ?> </h1>
+<!-- si j'ai un message d'erreur on l'affiche -->
+<?php if($form_result && $form_result->hasErrors()): ?>
+    <div class="alert alert-danger" role="alert">
+      <?= $form_result->getErrors()[0]->getMessage() ?>
+    </div>
+  <?php endif ?>
+
+  <!-- si j'ai un message de success on l'affiche -->
+  <?php if($form_success && $form_success->hasSuccess()): ?>
+    <div class="alert alert-success" role="alert">
+      <?= $form_success->getSuccessMessage()->getMessage() ?>
+    </div>
+  <?php endif ?>
 
 <div class="container-pizza-detail">
   <div class="box-image-detail">

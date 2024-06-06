@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Model\Order;
 use App\AppRepoManager;
 use Core\Repository\Repository;
 
@@ -19,8 +20,10 @@ class OrderRepository extends Repository
    */
   public function findLastOrder(): ?int
   {
-    $q = sprintf('SELECT * FROM %s ORDER BY id DESC LIMIT 1', 
-    $this->getTableName());
+    $q = sprintf(
+      'SELECT * FROM `%s` ORDER BY id DESC LIMIT 1',
+      $this->getTableName()
+    );
 
     $stmt = $this->pdo->query($q);
 
@@ -40,22 +43,29 @@ class OrderRepository extends Repository
    */
   public function findLastStatusByUser(int $user_id, string $status): bool
   {
-    $q = sprintf('SELECT * FROM %s WHERE `user_id` = :user_id AND `status` = :status ORDER BY id DESC LIMIT 1',
-    $this->getTableName());
+    $q = sprintf(
+      'SELECT * FROM `%s` WHERE `user_id` = :user_id AND `status` = :status ORDER BY id DESC LIMIT 1',
+      $this->getTableName()
+    );
 
     //on prépare la requête
     $stmt = $this->pdo->prepare($q);
     //on vérifie qu'elle est bien exécutée
-    if(!$stmt->execute(['user_id' => $user_id, 'status' => $status])) return false;
+    if (!$stmt->execute(['user_id' => $user_id, 'status' => $status])) return false;
 
     //on récupère les résultats
     $result = $stmt->fetchObject();
 
     //si pas de résultats on retourne false
-    if(!$result) return false;
+    if (!$result) return false;
 
     //si on a des résultats, on vérifie si la commande contient des lignes
+    $count_row = $this->countOrderRow($result->id);
+    //si on n'a pas de résultat on renvoi false
+    if (!$count_row) return false;
 
+    //si on a des résultats on renvoi true
+    return true;
   }
 
   /**
@@ -66,19 +76,75 @@ class OrderRepository extends Repository
   public function countOrderRow(int $order_id): ?int
   {
     //query qui additionne le nombre de lignes de commande
-    $q = sprintf('SELECT SUM(quantity) as count FROM %s WHERE `order_id` = :order_id',
-    AppRepoManager::getRm()->getOrderRowRepository()->getTableName());
+    $q = sprintf(
+      'SELECT SUM(quantity) as count FROM `%s` WHERE `order_id` = :order_id',
+      AppRepoManager::getRm()->getOrderRowRepository()->getTableName()
+    );
 
     //on prépare la requête
     $stmt = $this->pdo->prepare($q);
     //on vérifie qu'elle est bien exécutée
-    if(!$stmt->execute(['order_id' => $order_id])) return 0;
+    if (!$stmt->execute(['order_id' => $order_id])) return 0;
 
     //on récupère les résultats
     $result = $stmt->fetchObject();
 
     //si pas de résultats on retourne 0 sinon le nombre de lignes de commande
-    if(!$result || is_null($result)) return 0;
+    if (!$result || is_null($result)) return 0;
     return $result->count;
+  }
+
+
+  /**
+   * methode qui permet de créer/inserer une commande
+   * @param array $data
+   * @return ?int
+   */
+  public function insertOrder(array $data): ?int
+  {
+    //on crée la requête sql
+    $q = sprintf(
+      'INSERT INTO `%s` (`order_number`, `date_order`, `status`, `user_id`) VALUES (:order_number, :date_order, :status, :user_id)',
+      $this->getTableName()
+    );
+
+    //on prépare la requête
+    $stmt = $this->pdo->prepare($q);
+    //on vérifie qu'elle est bien exécutée, sinon return null (mais elle s'exécute quand même, pas besoin de lui dire)
+    if (!$stmt->execute($data)) return null;
+
+    //on retourne l'id de la commande qui a été inserée
+    return $this->pdo->lastInsertId();  //lastInsertId() appartient à PHP
+
+  }
+
+  /**
+   * methode qui retourne l'id de la commande si status = IN_CART (mise au panier) pour UN utilisateur
+   * @param int $user_id
+   * @return ?int 
+   */
+  public function findOrderIdByStatus(int $user_id): ?int
+  {
+    $status = Order::IN_CART;
+
+    //on crée la requête sql
+    $q = sprintf(
+      'SELECT * FROM `%s` WHERE `user_id` = :user_id AND `status` = :status ORDER BY id DESC LIMIT 1',  //:status signifie qu'on va passer des paramètres dynamiques (qui peuvent changer dans la requête)
+      $this->getTableName()
+    );
+
+    //on prépare la requête
+    $stmt = $this->pdo->prepare($q);
+    //on vérifie qu'elle est bien exécutée
+    if (!$stmt->execute(['user_id' => $user_id, 'status' => $status])) return null;   //si elle ne s'execute pas on retourne null
+
+    //on récupère les résultats
+    $result = $stmt->fetchObject();
+
+    //si pas de resultat on retourne null
+    if (!$result) return null;
+
+    //sinon on retourne l'id de la commande qui a été inserée
+    return $result->id;
   }
 }

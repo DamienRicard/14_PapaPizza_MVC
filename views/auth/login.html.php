@@ -7,7 +7,7 @@
 
   <!-- affichage des erreurs s'il y en a -->
   <?php if($form_result && $form_result->hasErrors()): ?>
-    <div class="alert aler-danger" role="alert">
+    <div class="alert alert-danger" role="alert">
       <?= $form_result->getErrors()[0]->getMessage() ?>
     </div>
   <?php endif ?>
