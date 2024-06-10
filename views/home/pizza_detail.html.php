@@ -7,6 +7,16 @@
     <div class="alert alert-danger" role="alert">
       <?= $form_result->getErrors()[0]->getMessage() ?>
     </div>
+    <script>
+      setTimeout(function() {
+        <?php Session::remove(Session::FORM_RESULT); ?>
+      },600);
+      setTimeout(function() {
+        document.querySelector('.alert-danger').remove();
+      },600);
+
+    </script>
+
   <?php endif ?>
 
   <!-- si j'ai un message de success on l'affiche -->
@@ -22,6 +32,7 @@
       setTimeout(function() {
         document.querySelector('.alert-success').remove();
       },600);
+
     </script>
 
   <?php endif ?>
