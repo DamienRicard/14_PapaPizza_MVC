@@ -147,4 +147,62 @@ class OrderRepository extends Repository
     //sinon on retourne l'id de la commande qui a été inserée
     return $result->id;
   }
+
+  /**
+   * methode qui récupère la commande en cours d'un utilisateur avec les lignes de commande
+   * @param int $user_id
+   * @return ?object
+   */
+  public function findOrderInProgressWithOrderRow(int $user_id): ?object
+  {
+    //on crée la requête sql
+    $q = sprintf(
+      'SELECT * 
+      FROM `%s` 
+      WHERE `user_id` = :user_id 
+      AND `status` = :status',
+      $this->getTableName()
+    );
+
+    //on prépare la requête
+    $stmt = $this->pdo->prepare($q);
+    //on exécute la requête
+    if(!$stmt->execute(['user_id' => $user_id, 'status' => Order::IN_CART])) return null;
+
+    //on recupère les resultats
+    $result = $stmt->fetchObject();
+
+    //si pas de resultat on retourne null
+    if (!$result) return null;
+
+    //si on a un résultat on doit hydrater notre objet Order avec toutes ses lignes de commandes associées
+    $result->order_rows = AppRepoManager::getRm()->getOrderRowRepository()->findOrderRowByOrder($result->id);
+
+    return $result;
+  }
+
+
+  /**
+     * methode qui permet de supprimer une commande
+     * @param int $id
+     * @return bool
+     */
+    public function deleteOrder(int $id): bool
+    {
+        //on cree la requete SQL
+        $q = sprintf(
+            'DELETE FROM `%s` 
+            WHERE `id` = :id',
+            $this->getTableName()
+        );
+
+        //on prepare la requete
+        $stmt = $this->pdo->prepare($q);
+
+        //on verifie que la requete est bien préparée
+        if (!$stmt) return false;
+
+        return $stmt->execute(['id' => $id]);
+    }
+
 }

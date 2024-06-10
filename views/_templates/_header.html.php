@@ -1,3 +1,11 @@
+<?php 
+use App\Controller\OrderController; 
+use Core\Session\Session;
+
+//juste pour récupérer le client en session et utiliser $user_id plus bas
+if($auth::isAuth()) $user_id = Session::get(Session::USER)->id;
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -74,6 +82,19 @@
                                         <i class="bi bi-person custom-svg"></i>
                                     </a>
                                 <?php endif ?>
+                        </li>
+                        <li class="custom-link">
+                            <?php if($auth::isAuth()) : ?>
+                                <a href="/order/<?= $user_id ?>" class="position-relative">
+                                    <div>
+                                        <i class="bi bi-cart custom-svg"></i>
+                                        <!-- on vérifie si on a des lignes dans le panier -->
+                                         <?php if(OrderController::hasOrderInCart()):?>
+                                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                                         <?php endif ?>
+                                    </div>
+                                </a>
+                            <?php endif ?>
                         </li>
 
 

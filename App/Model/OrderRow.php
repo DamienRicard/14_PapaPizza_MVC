@@ -9,6 +9,7 @@ class OrderRow extends Model
   public float $price;
   public int $order_id;
   public int $pizza_id;
+  public int $size_id;
 
   public Order $order;
   public Pizza $pizza;

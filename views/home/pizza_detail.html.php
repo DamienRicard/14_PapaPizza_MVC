@@ -1,5 +1,6 @@
 <?php use Core\Session\Session; ?>
 
+<?php if(!$auth::isAuth()) $auth::redirect('/connexion') ?>
 
 <h1 class="title title-detail"> <?= $pizza->name ?> </h1>
 <!-- si j'ai un message d'erreur on l'affiche -->

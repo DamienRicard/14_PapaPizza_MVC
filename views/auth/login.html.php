@@ -3,7 +3,7 @@
 
 <main class="container-form">
 
-  <h1>Je crée mon compte</h1>
+  <h1>Je me connecte</h1>
 
   <!-- affichage des erreurs s'il y en a -->
   <?php if($form_result && $form_result->hasErrors()): ?>

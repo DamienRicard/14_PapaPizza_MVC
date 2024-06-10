@@ -15,7 +15,7 @@ class PriceRepository extends Repository
   }
 
   /**
-   * Methode qui permet de récupérer les prix d'une pizza par son id avec sa taille associé
+   * Methode qui permet de récupérer tous les prix d'une pizza par son id avec sa taille associée
    * @param int $pizza_id
    * @return array
    */
@@ -66,4 +66,44 @@ class PriceRepository extends Repository
     //on retourne le tableau fraichement rempli
     return $array_result;
   }
+
+
+  /**
+   * Methode qui permet de récupérer les prix d'une pizza par son id avec sa taille associée
+   * @param int $pizza_id
+   * @param int $size_id
+   * @return ?float
+   */
+  public function getPriceByPizzaIdBySize(int $pizza_id, int $size_id):?float
+  {
+    //on crée notre requête sql
+    $q = sprintf(
+      'SELECT price.*, size.`label`
+      FROM %1$s AS price
+      INNER JOIN %2$s AS size ON price.`size_id` = size.`id`
+      WHERE price.`pizza_id` = :id
+      AND price.`size_id` = :size_id',
+      $this->getTableName(), //CORRESPOND au %1$s
+      AppRepoManager::getRm()->getSizeRepository()->getTableName() //CORRESPOND au %2$s
+    );
+
+    //on prépare la requête
+    $stmt = $this->pdo->prepare($q);
+
+    //on verifie que la requête est bien exécutée
+    if (!$stmt) return null;
+
+    //on execute en passant les paramètres (id de la pizza)
+    $stmt->execute(['id' => $pizza_id, 'size_id' => $size_id]);
+
+    //on récupère le résultat
+    $result = $stmt->fetchObject(); //raccourcis pour récuérer directement l'objet
+    
+    //on vérifie si on a un resultat
+    if(!$result) return null;
+
+    //on retourne le prix
+    return $result->price;
+  }
+
 }

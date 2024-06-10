@@ -4,6 +4,7 @@ namespace App;
 
 use MiladRahimi\PhpRouter\Router;
 use App\Controller\AuthController;
+use App\Controller\UserController;
 use App\Controller\OrderController;
 use App\Controller\PizzaController;
 use Core\Database\DatabaseConfigInterface;
@@ -78,6 +79,9 @@ class App implements DatabaseConfigInterface
 
     //PARTIE PANIER
     $this->router->post('/add/order', [OrderController::class, 'addOrder']);
+    $this->router->get('/order/{id}', [UserController::class, 'order']);
+    $this->router->post('/order/update/{id}', [OrderController::class, 'updateOrder']);
+    $this->router->post('/order-row/delete/{id}', [OrderController::class, 'deleteOrderRow']);
   }
 
   //3eme : la méthode qui démarre le routeur
