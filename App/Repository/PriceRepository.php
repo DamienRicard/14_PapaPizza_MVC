@@ -106,4 +106,31 @@ class PriceRepository extends Repository
     return $result->price;
   }
 
+
+  /**
+   * methode qui permet d'ajouter le prix d'une pizza
+   * @param array $data
+   * @return bool
+   */
+  public function insertPrice(array $data): bool
+  {
+    //on crée la requête sql, on insère dans les colonnes name, image_path, user_id, is_active
+    $q = sprintf('INSERT INTO `%s` (`price`, `size_id`, `pizza_id`) 
+    VALUES (:price, :size_id, :pizza_id)',
+    $this->getTableName()
+    );
+
+    //on prepare la requête
+    $stmt = $this->pdo->prepare($q);
+
+    //on verifie que la requête est bien préparée
+    if (!$stmt) return false;
+
+    //on execute en passant les paramètres
+    $stmt->execute($data);
+    
+    //on regarde si on a au moins une ligne qui a été inséré
+    return $stmt->rowCount() > 0;
+  }
+
 }

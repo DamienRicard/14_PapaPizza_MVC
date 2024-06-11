@@ -1,5 +1,7 @@
 <div class="admin-container">
   <h1> <?= $h1 ?> </h1>
+  <?php include(PATH_ROOT . 'views/_templates/_message.html.php'); ?>
+  
   <a class="call-action" href="/user/createPizza/<?= $user_id ?>"> Je crée ma pizza</a>
 
 </div>
@@ -13,6 +15,9 @@
         </a>
         <div class="card-body">
           <h3 class="card-title sub-title text-center"> <?= $pizza->name ?> </h3>
+          <div class="d-flex justify-content-center">
+            <a href="/user/pizza/delete/<?= $pizza->id ?>" onclick="return confirm('Voulez-vous vraiment supprimer cette pizza ?')" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+          </div>
         </div>
       </div>
     <?php endforeach ?>
