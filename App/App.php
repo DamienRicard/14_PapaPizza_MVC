@@ -60,6 +60,7 @@ class App implements DatabaseConfigInterface
   {
     //on va définir des pattern pour les routes
     $this->router->pattern('id', '[0-9]\d*'); //  "\d*" : autant de chiffres qu'on veut en longueur
+    $this->router->pattern('order_id', '[0-9]\d*'); //  "\d*" : autant de chiffres qu'on veut en longueur
 
 
 
@@ -88,6 +89,7 @@ class App implements DatabaseConfigInterface
     $this->router->get('/user/list-custom-pizza/{id}', [UserController::class, 'listCustomPizza']);
     $this->router->post('/add-custom-pizza-form', [PizzaController::class, 'addCustomPizzaForm']);
     $this->router->get('/user/pizza/delete/{id}', [UserController::class, 'deletePizza']);
+    $this->router->get('/order/confirm/{order_id}', [OrderController::class, 'paymentStripe']);
   }
 
   //3eme : la méthode qui démarre le routeur

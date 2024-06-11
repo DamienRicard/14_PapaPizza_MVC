@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Model\Order;
 use App\AppRepoManager;
 use Core\Form\FormError;
+use Stripe\StripeClient;
 use Core\Form\FormResult;
 use Core\Session\Session;
 use Core\Form\FormSuccess;
@@ -236,5 +237,15 @@ class OrderController extends Controller
       //on redirige sur la page panier
       self::redirect('/order/' . $user_id);
     }
+  }
+
+
+  /**
+   * methode pour effectuer le payment avec Stripe
+   */
+  public function paymentStripe()
+  {
+    //on instancie Stripe
+    $stripe = new StripeClient(STRIPE_SK);
   }
 }

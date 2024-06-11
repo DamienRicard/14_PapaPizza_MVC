@@ -64,7 +64,7 @@
           <td class="footer-description"></td>
           <td class="footer-description">Prix Total : <?= number_format($total, 2, ',', '.') ?> €</td>
           <td class="footer-description">
-            <a href="#" class="btn btn-warning">Payer <?= number_format($total, 2, ',', '.') ?> €</a>
+            <a href="/order/confirm/<?= $order->id ?>" class="btn btn-warning">Payer <?= number_format($total, 2, ',', '.') ?> €</a>
           </td>
          </tr>
       </tbody>
