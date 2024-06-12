@@ -70,6 +70,7 @@ class App implements DatabaseConfigInterface
     //connexion
     $this->router->get('/connexion', [AuthController::class, 'loginForm']);
     $this->router->get('/inscription', [AuthController::class, 'registerForm']);
+    $this->router->get('/logout', [AuthController::class, 'logout']);
     $this->router->post('/login',[AuthController::class, 'login']);
     $this->router->post('/register',[AuthController::class, 'register']);
 
@@ -81,8 +82,10 @@ class App implements DatabaseConfigInterface
     //PARTIE PANIER
     $this->router->post('/add/order', [OrderController::class, 'addOrder']);
     $this->router->get('/order/{id}', [UserController::class, 'order']);
+   
     $this->router->post('/order/update/{id}', [OrderController::class, 'updateOrder']);
     $this->router->post('/order-row/delete/{id}', [OrderController::class, 'deleteOrderRow']);
+    $this->router->get('/order/success-order/{order_id}', [OrderController::class, 'successOrder']);
 
     //PARTIE UTILISATEUR
     $this->router->get('/user/createPizza/{id}', [UserController::class, 'createPizza']);

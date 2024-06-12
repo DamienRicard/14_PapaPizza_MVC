@@ -205,4 +205,35 @@ class OrderRepository extends Repository
         return $stmt->execute(['id' => $id]);
     }
 
+
+    /**
+     * methode qui  récupère une commande avec son id et avec toutes ses lignes de commandes
+     * @param int $order_id
+     * @return ?object
+     */
+    public function findOrderByIdWithRow(int $order_id): ?object
+    {
+      //on crée la requête sql
+      $q = sprintf(
+        'SELECT * 
+        FROM `%s` 
+        WHERE `id` = :order_id',
+        $this->getTableName()
+      );
+
+      //on prépare la requête
+      $stmt = $this->pdo->prepare($q);
+
+      //on vérifie qu'elle est bien exécutée
+      if(!$stmt->execute(['order_id' => $order_id])) return null;
+
+      //on recupère les resultats
+      $result = $stmt->fetchObject();
+
+      //on va hydrater notre objet Order avec toutes ses lignes de commandes associées
+      $result->order_rows = AppRepoManager::getRm()->getOrderRowRepository()->findOrderRowByOrder($result->id);
+
+      return $result;
+    }
+
 }

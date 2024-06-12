@@ -145,7 +145,7 @@ class OrderController extends Controller
    * methode qui permet de modifier la quantité d'une ligne de commande
    * @param ServerRequest $request
    * @param int $id
-   * @param void
+   * @return void
    */
   public function updateOrder(ServerRequest $request, int $id): void
   {
@@ -203,7 +203,7 @@ class OrderController extends Controller
    * methode qui permet de supprimer une ligne de commande
    * @param ServerRequest $request
    * @param int $id
-   * @param void
+   * @return void
    */
   public function deleteOrderRow(ServerRequest $request, int $id):void
   {
@@ -242,10 +242,60 @@ class OrderController extends Controller
 
   /**
    * methode pour effectuer le payment avec Stripe
+   * @param int $order_id
+   * @return void
    */
-  public function paymentStripe()
+  public function paymentStripe(int $order_id):void
   {
-    //on instancie Stripe
+    //on instancie Stripe et on lui passe la clé secrète qui permet de cabler l'api de Stripe avec notre compte Stripe
     $stripe = new StripeClient(STRIPE_SK);
+
+    if(!AuthController::isAuth()) $this->redirect('/');
+
+    //on récupère la commande avec ses lignes de commande du panier
+    $data = AppRepoManager::getRm()->getOrderRepository()->findOrderByIdWithRow($order_id);
+    var_dump($data);
+
+    if(!$data) $this->redirect('/');
+    //on redefini nos variables pour confort pour le développeur, simplifie le code
+    $order_number = $data->order_number;
+    $name = "Commande n° {$order_number}";
+
+    //on déclare un tableau vide pour stocker les payements intents de Stripe (intentions de paiment)
+    $pruduct_stripe = [];
+
+    //on boucle sur les lignes de commande du panier
+    foreach($data->order_rows as $row){
+      $product_stripe[] = [
+        'price_data' => [
+          'currency' => 'eur',
+          'product_data' => [
+            'name' => $row->pizza->name,
+            'description' => "{$name} : \n {$row->pizza->name} x {$row->quantity}"
+          ],
+          'unit_amount' => $row->price * 100 //car stripe attend un prix en cts
+        ],
+        'quantity' => $row->quantity
+      ];
+    }
+
+    //on crée une checkout session de Stripes avec le tableau de produits
+    $checkout_session = $stripe->checkout->sessions->create([
+      'line_items' => $product_stripe,
+      'mode' => 'payment',
+      'success_url' => 'http://14-ern24-papapizza.lndo.site/order/success-order/' . $order_id,  //si j'ai payé et que ça s'est bien passée
+      'cancel_url' => 'http://14-ern24-papapizza.lndo.site/order/' . $order_id //si pas bon et que je veux annuler ça me redirige vers le panier
+    ]);
+  }
+
+
+  /**
+   * méthode qui permet de checker et rediriger vers page d'accueil si tout s'est bien passé
+   * @param
+   * @return
+   */
+  public function successOrder()
+  {
+
   }
 }
