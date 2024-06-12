@@ -236,4 +236,26 @@ class OrderRepository extends Repository
       return $result;
     }
 
+
+    /**
+     * methode qui permet de change le status d'une commande
+     * @param array $data
+     * @return bool
+     */
+    public function updateOrder(array $data): bool
+    {
+        //on cree la requete SQL
+        $q = sprintf(
+            'UPDATE `%s` 
+            SET `status` = :status
+            WHERE `id` = :id',
+            $this->getTableName()
+        );
+
+        //on prepare la requete
+        $stmt = $this->pdo->prepare($q);
+
+        return $stmt->execute($data); //retourne vrai si exécutée ou faux si pas exécutée
+    }
+
 }

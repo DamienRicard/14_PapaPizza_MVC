@@ -275,7 +275,7 @@ class OrderController extends Controller
           ],
           'unit_amount' => $row->price * 100 //car stripe attend un prix en cts
         ],
-        'quantity' => $row->quantity
+        'quantity' => 1
       ];
     }
 
@@ -286,16 +286,51 @@ class OrderController extends Controller
       'success_url' => 'http://14-ern24-papapizza.lndo.site/order/success-order/' . $order_id,  //si j'ai payé et que ça s'est bien passée
       'cancel_url' => 'http://14-ern24-papapizza.lndo.site/order/' . $order_id //si pas bon et que je veux annuler ça me redirige vers le panier
     ]);
+
+    header("HTTP/1.1 303 See Other");
+    header("Location: " . $checkout_session->url);
   }
 
 
   /**
-   * méthode qui permet de checker et rediriger vers page d'accueil si tout s'est bien passé
-   * @param
-   * @return
+   * méthode qui permet de valider la commande, checker et rediriger vers page d'accueil si tout s'est bien passé
+   * @param int $order_id
+   * @return void
    */
-  public function successOrder()
+  public function successOrder(int $order_id): void
   {
+    //permet stocker messages erreurs ou success
+    $form_result = new FormResult();
 
+    //on va récupérer la commande
+    $order = AppRepoManager::getRm()->getOrderRepository()->findOrderByIdWithRow($order_id);
+
+    //on va reconstruire un tableau de données pour mettre à jour le status de la commande
+    $data = [
+      'id' => $order_id,
+      'status' => Order::VALIDATED
+    ];
+
+    $order = AppRepoManager::getRm()->getOrderRepository()->updateOrder($data);   //$order sera soit vrai soit faux
+    if(!$order){
+      $form_result->addError(new FormError('La commande n\'a pas pu être validée'));
+    }else{
+      $form_result->addSuccess(new FormSuccess('La commande a bien été validée'));
+    }
+
+    //si on a des erreurs on les met en session pour les interpreter
+    if ($form_result->hasErrors()) {
+      Session::set(Session::FORM_RESULT, $form_result);
+      //on redirige sur la page du panier
+      self::redirect('/order/' . $order_id);
+    }
+
+    //si on a des success on les met en session pour les interpreter
+    if ($form_result->getSuccessMessage()) {
+      Session::remove(Session::FORM_RESULT);
+      Session::set(Session::FORM_SUCCESS, $form_result);
+      //on redirige sur la page detail de la pizza
+      self::redirect('/order/' . $order_id); //todo rediriger sur liste des commandes
+    }
   }
 }
