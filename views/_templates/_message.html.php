@@ -12,7 +12,7 @@
         <?php
         Session::remove(Session::FORM_RESULT);
         ?>
-      }, 300);
+      }, 500);
       setTimeout(function() {
         document.querySelector('.alert-danger').remove();
       }, 3000);
@@ -28,7 +28,7 @@
         <?php
         Session::remove(Session::FORM_SUCCESS);
         ?>
-      }, 300);
+      }, 500);
       setTimeout(function() {
         document.querySelector('.alert-success').remove();
       }, 3000);

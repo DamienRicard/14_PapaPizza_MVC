@@ -88,6 +88,9 @@ class App implements DatabaseConfigInterface
     $this->router->post('/add-custom-pizza-form', [PizzaController::class, 'addCustomPizzaForm']);
     $this->router->get('/user/pizza/delete/{id}', [UserController::class, 'deletePizza']);
     $this->router->get('/order/confirm/{order_id}', [OrderController::class, 'paymentStripe']);
+    $this->router->get('/user/list-order/{id}', [UserController::class, 'listOrder']);
+    $this->router->get('/user/order/cancel/{id}', [OrderController::class, 'cancelOrder']);
+    $this->router->get('/user/order/reactivated/{id}', [OrderController::class, 'reactivatedOrder']);
   }
 
   //3eme : la méthode qui démarre le routeur

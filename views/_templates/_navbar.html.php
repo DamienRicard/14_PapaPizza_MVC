@@ -47,7 +47,7 @@
                                                 <hr class="dropdown-divider">
                                             </li>
                                             <li><a class="dropdown-item custom-link" href="/user/list-custom-pizza/<?= $user_id ?>">Mes pizzas</a></li>
-                                            <li><a class="dropdown-item custom-link" href="">Mes commandes</a></li>
+                                            <li><a class="dropdown-item custom-link" href="/user/list-order/<?= $user_id ?>">Mes commandes</a></li>
                                             <li>
                                                 <hr class="dropdown-divider">
                                             </li>
