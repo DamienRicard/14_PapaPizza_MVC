@@ -17,4 +17,11 @@ Dotenv::createImmutable(PATH_ROOT)->load();
 define('STRIPE_PK', $_ENV['STRIPE_PK']);
 define('STRIPE_SK', $_ENV['STRIPE_SK']);
 
+//on définit des constantes
+define('DB_HOST', $_ENV['DB_HOST']);
+define('DB_NAME', $_ENV['DB_NAME']);
+define('DB_USER', $_ENV['DB_USER']);
+define('DB_PASS', $_ENV['DB_PASS']);
+
+
 App::getApp()->start();

@@ -13,11 +13,6 @@ use MiladRahimi\PhpRouter\Exceptions\InvalidCallableException;
 
 class App implements DatabaseConfigInterface
 {
-  //on définit des constantes
-  private const DB_HOST = 'database';
-  private const DB_NAME = 'database_lamp';
-  private const DB_USER = 'admin';
-  private const DB_PASS = 'admin';
 
   private static ?self $instance = null;
   //on crée une méthode publique qui sera appellée au démarrage de l'appli dans index.php
@@ -109,29 +104,24 @@ class App implements DatabaseConfigInterface
 
 
 
-
-
-
-
-
   public function getHost(): string
   {
-    return self::DB_HOST;
+    return DB_HOST;
   }
 
   public function getName(): string
   {
-    return self::DB_NAME;
+    return DB_NAME;
   }
 
   public function getUser(): string
   {
-    return self::DB_USER;
+    return DB_USER;
   }
 
   public function getPass(): string
   {
-    return self::DB_PASS;
+    return DB_PASS;
   }
 
 }
