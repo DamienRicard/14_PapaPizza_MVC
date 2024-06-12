@@ -251,6 +251,7 @@ class OrderController extends Controller
     $stripe = new StripeClient(STRIPE_SK);
 
     if(!AuthController::isAuth()) $this->redirect('/');
+    $user_id = Session::get(Session::USER)->id;
 
     //on récupère la commande avec ses lignes de commande du panier
     $data = AppRepoManager::getRm()->getOrderRepository()->findOrderByIdWithRow($order_id);
@@ -284,7 +285,7 @@ class OrderController extends Controller
       'line_items' => $product_stripe,
       'mode' => 'payment',
       'success_url' => 'http://14-ern24-papapizza.lndo.site/order/success-order/' . $order_id,  //si j'ai payé et que ça s'est bien passée
-      'cancel_url' => 'http://14-ern24-papapizza.lndo.site/order/' . $order_id //si pas bon et que je veux annuler ça me redirige vers le panier
+      'cancel_url' => 'http://14-ern24-papapizza.lndo.site/order/' . $user_id //si pas bon et que je veux annuler ça me redirige vers le panier
     ]);
 
     header("HTTP/1.1 303 See Other");
@@ -304,6 +305,7 @@ class OrderController extends Controller
 
     //on va récupérer la commande
     $order = AppRepoManager::getRm()->getOrderRepository()->findOrderByIdWithRow($order_id);
+    $user_id = Session::get(Session::USER)->id;
 
     //on va reconstruire un tableau de données pour mettre à jour le status de la commande
     $data = [
@@ -330,7 +332,7 @@ class OrderController extends Controller
       Session::remove(Session::FORM_RESULT);
       Session::set(Session::FORM_SUCCESS, $form_result);
       //on redirige sur la page detail de la pizza
-      self::redirect('/order/' . $order_id); //todo rediriger sur liste des commandes
+      self::redirect('/order/' . $user_id); //todo rediriger sur liste des commandes
     }
   }
 }

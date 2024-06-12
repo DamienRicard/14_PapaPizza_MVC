@@ -12,7 +12,7 @@
   ?>
     <div>
       <p class="header-description">Commande : <?= $order->order_number ?></p>
-      <p class="header-description">Commande passé le : <?= $dateTime->format("d/m/Y H:i:s") ?></p>
+      <p class="header-description">Commande créee le : <?= $dateTime->format("d/m/Y H:i:s") ?></p>
     </div>
     <table class="table table-striped">
       <thead>
